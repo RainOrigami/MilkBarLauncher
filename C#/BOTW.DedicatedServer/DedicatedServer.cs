@@ -333,10 +333,10 @@ namespace BOTW.DedicatedServer
         
         public void setupCommands()
         {
-            string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\BOTWM";
-            string fileName = "\\QuestFlagsNames.txt";
+            string AppdataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BOTWM");
+            string fileName = "QuestFlagsNames.txt";
 
-            string text = File.ReadAllText(AppdataFolder + fileName);
+            string text = File.ReadAllText(Path.Combine(AppdataFolder, fileName));
 
             QuestData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(text);
 
@@ -350,7 +350,7 @@ namespace BOTW.DedicatedServer
             //Gamemodes.Add("Bingo???", new bool[] { true, true, false, false, true, true, true, false, false });
             //Gamemodes.Add("Hide n' Seek", new bool[] { true, true, false, false, false, false, false, false, false });
 
-            Gamemodes = JsonConvert.DeserializeObject<List<ServerSettings>>(File.ReadAllText(Directory.GetCurrentDirectory() + "/Gamemodes.json"));
+            Gamemodes = JsonConvert.DeserializeObject<List<ServerSettings>>(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Gamemodes.json")));
 
             var methods = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
@@ -385,7 +385,7 @@ namespace BOTW.DedicatedServer
 
         public void CopyAppdataFiles()
         {
-            string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\BOTWM";
+            string AppdataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BOTWM");
             List<string> Resources = Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(resource => resource.Contains("AppdataFiles")).ToList();
 
             if (!Directory.Exists(AppdataFolder))
@@ -394,7 +394,7 @@ namespace BOTW.DedicatedServer
             foreach (string resource in Resources)
             {
                 Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
-                string output = $"{AppdataFolder}\\{resource.Replace("BOTW.DedicatedServer.AppdataFiles.", "")}";
+                string output = Path.Combine(AppdataFolder,  resource.Replace("BOTW.DedicatedServer.AppdataFiles.", ""));
                 using (FileStream AppdataFile = new FileStream(output, FileMode.Create))
                 {
                     byte[] b = new byte[s.Length + 1];

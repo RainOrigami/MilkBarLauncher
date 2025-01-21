@@ -22,8 +22,8 @@
         private static LogLevelEnum LogLevel;
 
         private static string CurrentDirectory = Directory.GetCurrentDirectory();
-        private static string LogPath = $"{CurrentDirectory}\\LatestLog.txt";
-        private static string LogsFolder = $"{CurrentDirectory}\\Logs";
+        private static string LogPath = Path.Combine(CurrentDirectory, "LatestLog.txt");
+        private static string LogsFolder = Path.Combine(CurrentDirectory, "Logs");
 
         private static Mutex logMutex = new Mutex();
 
@@ -65,7 +65,7 @@
                 if (!Directory.Exists(LogsFolder))
                     Directory.CreateDirectory(LogsFolder);
 
-                File.Move(LogPath, $"{LogsFolder}\\{creationTime}.txt");
+                File.Move(LogPath, Path.Combine(LogsFolder, $"{creationTime}.txt"));
             }
 
             File.CreateText(LogPath);
